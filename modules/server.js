@@ -4,9 +4,8 @@ const handlers = require('./handlers')
 
 const start = () => {
     const onRequest = (req, res) => {
-        console.log('got request'.cyan)
+        console.log('get a request'.green)
         res.writeHead(200, {'content-type': 'text/plain' });
-
         switch(req.url) {
             case '/':
             case '/home':
@@ -15,8 +14,11 @@ const start = () => {
             case '/upload':
                 handlers.upload(req, res);
                 break;
+            case '/show':
+                handlers.show(req, res);
+                break;    
             default:
-                handlers.error(req,res);
+                handlers.error(req, res);
         }
     }
     http.createServer(onRequest).listen(9000);
