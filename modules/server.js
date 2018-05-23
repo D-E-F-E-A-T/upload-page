@@ -5,7 +5,7 @@ const handlers = require('./handlers')
 const start = () => {
     const onRequest = (req, res) => {
         console.log('get a request'.green)
-        res.writeHead(200, {'content-type': 'text/plain' });
+        res.writeHead(200, {'content-type' : 'text/plain' });
         switch(req.url) {
             case '/':
             case '/home':
@@ -16,7 +16,7 @@ const start = () => {
                 break;
             case '/show':
                 handlers.show(req, res);
-                break;    
+                break;
             default:
                 handlers.error(req, res);
         }
