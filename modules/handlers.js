@@ -11,7 +11,7 @@ exports.upload = (req, res) => {
       fs.rename(oldpath, newpath, (err) => {
         if (err) throw err;
         res.writeHead(200, {"Content-Type": "text/html; charset=utf-8"});
-        res.write("received image: <br/>");
+        res.write("<h1>received image:</h1> <br/>");
         res.write("<img src='/show'/>")
         res.end();
       });
