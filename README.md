@@ -11,7 +11,7 @@
 
 ```
 
-Your app should now be running on [localhost:5000](http://localhost:9000/).
+Your app should now be running on [localhost:9000](http://localhost:9000/).
 
 ## Built With
 
