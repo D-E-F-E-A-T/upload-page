@@ -5,6 +5,7 @@ const handlers = require('./handlers')
 const start = () => {
     const onRequest = (req, res) => {
         console.log('get a request'.green)
+    
         res.writeHead(200, {'content-type' : 'text/plain' });
         switch(req.url) {
             case '/':
@@ -21,6 +22,7 @@ const start = () => {
                 handlers.error(req, res);
         }
     }
+
     http.createServer(onRequest).listen(9000);
     console.log('server running ( ͡° ͜ʖ ͡°) '.cyan);
 }

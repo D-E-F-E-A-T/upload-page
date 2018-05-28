@@ -2,6 +2,21 @@ const colors = require('colors');
 const fs = require("fs");
 const formidable = require('formidable');
 
+function readFile(path ,req, res) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(path, (err, data) => {
+            if(err) {
+                return reject(err);
+            }
+            resolve(data)
+        });
+    });
+}
+
+/*readFile('./test')
+.then(result => console.log(result))
+.catch(err => console.log(err))
+*/
 exports.upload = (req, res) => {
   fs.readFile('templates/upload.html', (err, html) => {
     let form = new formidable.IncomingForm();
@@ -21,11 +36,10 @@ exports.upload = (req, res) => {
 
 exports.welcome = (req, res) => {
     console.log('Start request welcome'.green);
-    fs.readFile('templates/start.html', (err, html) => {
-        res.writeHead(200, {"Content-Type": "text/html; charset=utf-8"});
-        res.write(html);
-        res.end();
-    });
+    res.writeHead(200, {"Content-Type": "text/html; charset=utf-8"})
+	readFile('templates/start.html')
+    .then(result => res.write(result))
+    .then(result => res.end())
 }
 
 exports.show = (req, res) => {
