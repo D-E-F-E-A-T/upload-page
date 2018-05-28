@@ -2,15 +2,29 @@
     <head>
         <meta http-equiv="Content-Type content=text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="style.css">
+        <style>
+            body {
+                text-align: center;
+            }
+            div {
+                display: inline-block;
+                text-align: left;
+            }
+        </style>
     </head>
     <body>
-        <h1>Wgraj plik</h1>
-        <form action="/upload" enctype="multipart/form-data" method="post">
-            <label>File</label>
-            <input type="file" name="upload" multiple="multiple">
-            <br><br>
-            <input type="submit" value="send">
-        </form>
+        <div>
+            <h1 style=>Upload File</h1>
+            <form action="/upload" enctype="multipart/form-data" method="post">
+                <label>Title file</label>
+                <input type="text" name="title">
+                <br><br>
+                <label>File</label>
+                <input type="file" name="upload" multiple="multiple">
+                <br><br>
+                <input type="submit" value="send">
+            </form>
+        </div>
     </body>
     <!-- Script for polyfilling Promises on IE9 and 10 -->
     <script src='https://cdn.polyfill.io/v2/polyfill.min.js'></script>

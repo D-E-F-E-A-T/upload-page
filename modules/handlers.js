@@ -13,39 +13,66 @@ function readFile(path) {
     });
 }
 
-exports.upload = (req, res) => {
-  fs.readFile('templates/upload.html', (err, html) => {
-    let form = new formidable.IncomingForm();
-    form.parse(req, (error, fields, files) => {
-      let oldpath = files.upload.path;
-      let newpath = 'C:/Users/Public/' + "test.jpg";
-      fs.rename(oldpath, newpath, (err) => {
-        if (err) throw err;
-        res.writeHead(200, {"Content-Type": "text/html; charset=utf-8"});
-        res.write("<h1>Received image</h1> <br/>");
-        res.write("<img src='/show'/>")
-        res.end();
-      });
+function asyncForm(form, req, res) {
+    return new Promise((resolve, reject) => {
+        form.parse(req, (err, fields, files) => {
+            if(err) {
+                return reject(err);
+            }
+            const data = {
+                oldpath: files.upload.path,
+                newpath: 'C:/Users/Public/' + "test.jpg",
+                title: fields.title
+            }
+            resolve(data);
+        });
     });
-  });
+}
+
+function asyncRename(oldpath, newpath, title) {
+    return new Promise((resolve, reject) => {
+        fs.rename(oldpath, newpath, (err) => {
+            if(err) {
+                return reject(err)
+            } else {
+                resolve(title)
+            }
+        });
+    });
+}
+
+exports.upload = (req, res) => {
+    let form = new formidable.IncomingForm();
+    res.writeHead(200, {"Content-Type": "text/html; charset=utf-8"});
+    asyncForm(form, req ,res)
+    .then(result => result)
+    .then(result => asyncRename(result.oldpath, result.newpath, result.title))
+    .then(result => res.write(`
+        <figure style="text-align: center">
+            <em>Image name:</em> <h2>${result}</h2><br>
+            <img src="/show" alt="smile Face :)" width="400" height="400">
+            <figcaption><var>file saved in: 'C:/Users/Public/'</var></figcaption>
+        </figure>
+    `))
+    .then(result => res.end())
+
 }
 
 exports.welcome = (req, res) => {
     console.log('Start request welcome'.green);
     res.writeHead(200, {"Content-Type": "text/html; charset=utf-8"});
     readFile('templates/start.html')
-      .then(result => res.write(result))
-      .then(result => res.end())
-      .catch(err => console.log(err))
+    .then(result => res.write(result))
+    .then(result => res.end())
+    .catch(err => console.log(err))
 }
 
 exports.show = (req, res) => {
     res.writeHead(200, {"Content-Type" :  "image/jpeg"});
     readFile('C:/Users/Public/test.jpg')
-      .then(result => res.write(result))
-      .then(result => res.end())
-      .catch(err => console.log(err))
-
+    .then(result => res.write(result))
+    .then(result => res.end())
+    .catch(err => console.log(err))
 }
 
 exports.error = (req, res) => {

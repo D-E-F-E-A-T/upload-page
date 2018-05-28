@@ -1,5 +1,5 @@
 
-#  Page for upload images (in jpg format)
+#  Page for upload images 
 
 ## Getting Started
 
