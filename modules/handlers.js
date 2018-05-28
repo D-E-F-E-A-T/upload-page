@@ -2,7 +2,7 @@ const colors = require('colors');
 const fs = require("fs");
 const formidable = require('formidable');
 
-function readFile(path ,req, res) {
+function readFile(path) {
     return new Promise((resolve, reject) => {
         fs.readFile(path, (err, data) => {
             if(err) {
@@ -13,10 +13,6 @@ function readFile(path ,req, res) {
     });
 }
 
-/*readFile('./test')
-.then(result => console.log(result))
-.catch(err => console.log(err))
-*/
 exports.upload = (req, res) => {
   fs.readFile('templates/upload.html', (err, html) => {
     let form = new formidable.IncomingForm();
@@ -26,7 +22,7 @@ exports.upload = (req, res) => {
       fs.rename(oldpath, newpath, (err) => {
         if (err) throw err;
         res.writeHead(200, {"Content-Type": "text/html; charset=utf-8"});
-        res.write("<h1>received image:</h1> <br/>");
+        res.write("<h1>Received image</h1> <br/>");
         res.write("<img src='/show'/>")
         res.end();
       });
@@ -36,18 +32,20 @@ exports.upload = (req, res) => {
 
 exports.welcome = (req, res) => {
     console.log('Start request welcome'.green);
-    res.writeHead(200, {"Content-Type": "text/html; charset=utf-8"})
-	readFile('templates/start.html')
-    .then(result => res.write(result))
-    .then(result => res.end())
+    res.writeHead(200, {"Content-Type": "text/html; charset=utf-8"});
+    readFile('templates/start.html')
+      .then(result => res.write(result))
+      .then(result => res.end())
+      .catch(err => console.log(err))
 }
 
 exports.show = (req, res) => {
-    fs.readFile("C:/Users/Public/test.jpg", "binary", (error, file) => {
-        res.writeHead(200, {"Content-Type" :  "image/jpeg"});
-        res.write(file, "binary");
-        res.end();
-    });
+    res.writeHead(200, {"Content-Type" :  "image/jpeg"});
+    readFile('C:/Users/Public/test.jpg')
+      .then(result => res.write(result))
+      .then(result => res.end())
+      .catch(err => console.log(err))
+
 }
 
 exports.error = (req, res) => {
@@ -55,3 +53,9 @@ exports.error = (req, res) => {
     res.write('404 :(');
     res.end();
 }
+
+
+/*readFile('./test')
+.then(result => console.log(result))
+.catch(err => console.log(err))
+*/
